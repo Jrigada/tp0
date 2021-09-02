@@ -13,15 +13,23 @@ int main(void)
 
 	logger = iniciar_logger();
 
+    log_info(logger, "Hola soy un log");
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
 
 	config = iniciar_config();
 
+    ip = config_get_string_value(config, "IP");
+    puerto = config_get_string_value(config, "Puerto");
+    valor = config_get_string_value(config, "Valor");
+
 	// Usando el config creado previamente
 	// Lee las variables de IP, Puerto y Valor
 
 	//Loggear valor de config
+    log_info(logger, ip);
+    log_info(logger, puerto);
+    log_info(logger, valor);
 
 	leer_consola(logger);
 
@@ -33,7 +41,7 @@ int main(void)
 	// Creamos una conexión hacia el servidor
 	conexion = crear_conexion(ip, puerto);
 
-	//enviar CLAVE al servirdor
+	//enviar CLAVE al servidor
 
 	paquete(conexion);
 
@@ -45,14 +53,14 @@ int main(void)
 
 t_log* iniciar_logger(void)
 {
-	t_log* nuevo_logger;
+	t_log* nuevo_logger = log_create("/home/utn_so/tp02021/tp0/log.txt", "tp0", true, LOG_LEVEL_INFO);
 
 	return nuevo_logger;
 }
 
 t_config* iniciar_config(void)
 {
-	t_config* nuevo_config;
+	t_config* nuevo_config = config_create("/home/utn_so/tp02021/tp0/tp0.config");
 
 	return nuevo_config;
 }
@@ -66,7 +74,12 @@ void leer_consola(t_log* logger)
 
 	// Acá la idea es que imprimas por el log lo que recibis de la consola.
 
-
+    while (strcmp(leido, "\0") != 0) {
+        log_info(logger, leido);
+        free(leido);
+        leido = readline(">");
+    }
+    free(leido);
 }
 
 void paquete(int conexion)

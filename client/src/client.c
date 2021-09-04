@@ -31,7 +31,7 @@ int main(void)
     log_info(logger, puerto);
     log_info(logger, valor);
 
-	leer_consola(logger);
+	//leer_consola(logger);
 
 
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
@@ -53,14 +53,14 @@ int main(void)
 
 t_log* iniciar_logger(void)
 {
-	t_log* nuevo_logger = log_create("/home/utn_so/tp02021/tp0/log.txt", "tp0", true, LOG_LEVEL_INFO);
+	t_log* nuevo_logger = log_create("/home/utn_so/Escritorio/repo_tp0/tp0/log.txt", "tp0", true, LOG_LEVEL_INFO);
 
 	return nuevo_logger;
 }
 
 t_config* iniciar_config(void)
 {
-	t_config* nuevo_config = config_create("/home/utn_so/tp02021/tp0/tp0.config");
+	t_config* nuevo_config = config_create("/home/utn_so/Escritorio/repo_tp0/tp0/tp0.config");
 
 	return nuevo_config;
 }
@@ -84,12 +84,26 @@ void leer_consola(t_log* logger)
 
 void paquete(int conexion)
 {
+    char* clave;
+    t_config* config = iniciar_config();
 	//Ahora toca lo divertido!
 
+    clave = config_get_string_value(config, "CLAVE");
+
+    enviar_mensaje(clave,conexion);
+
 	char* leido;
-	t_paquete* paquete;
 
+    leido = readline(">");
+	t_paquete* paquete = crear_paquete();
 
+    int tamanio = ((int)strlen(leido))+1;
+
+    agregar_a_paquete(paquete,leido, tamanio);
+
+    enviar_paquete(paquete,conexion);
+
+    eliminar_paquete(paquete);
 }
 
 void terminar_programa(int conexion, t_log* logger, t_config* config)

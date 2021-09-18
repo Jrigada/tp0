@@ -3,7 +3,7 @@
 t_log* logger;
 
 int main(void) {
-	logger = log_create("log.log", "Servidor", 1, LOG_LEVEL_DEBUG);
+	logger = log_create("logS.txt", "Servidor", 1, LOG_LEVEL_DEBUG);
 
 	int server_fd = iniciar_servidor();
 	log_info(logger, "Servidor listo para recibir al cliente");
@@ -33,6 +33,6 @@ int main(void) {
 	return EXIT_SUCCESS;
 }
 
-void iterator(t_log* logger, char* value) {
+void iterator(char* value) {
 	log_info(logger,"%s\n", value);
 }
